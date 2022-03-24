@@ -25,7 +25,9 @@ strapi:
     # template variable
     collections:
         # Example for a "articles" collection
-        articles:         
+        articles:
+            # Strapi API version
+            api_version: v4
             # Collection name (optional)
             type: article
             # Permalink used to generate the output files (eg. /articles/:id).
