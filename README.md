@@ -4,13 +4,13 @@
 
 Add the "jekyll-strapi" gem to your Gemfile:
 
-```
-gem "jekyll-strapi"
+```sh
+gem "jekyll-strapi", github: "Nats-ji/jekyll-strapi"
 ```
 
 Then add "jekyll-strapi" to your plugins in `_config.yml`:
 
-```
+```yml
 plugins:
     - jekyll-strapi
 ```
