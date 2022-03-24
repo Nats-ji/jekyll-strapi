@@ -40,6 +40,10 @@ strapi:
             output: true
 ```
 
+## Authorization
+
+Set the api key in the `STRAPI_API_KEY` environment variable.
+
 ## Usage
 
 This plugin provides the `strapi` template variable. This template provides access to the collections defined in the configuration.

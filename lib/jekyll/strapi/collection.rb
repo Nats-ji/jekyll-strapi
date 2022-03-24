@@ -11,6 +11,7 @@ module Jekyll
         @site = site
         @collection_name = collection_name
         @config = config
+        @api_key = ENV["STRAPI_API_KEY"]
       end
 
       def generate?
@@ -30,7 +31,11 @@ module Jekyll
         end
         Jekyll.logger.info "Jekyll Strapi:", "Fetching entries from #{uri}"
         # Get entries
-        response = Net::HTTP.get_response(uri)
+        if @api_key
+          response = Net::HTTP.get_response(uri, { "Authorization" => "Bearer #{api_key}"})
+        else
+          response = Net::HTTP.get_response(uri)
+        end
         # Check response code
         if response.code == "200"
           result = JSON.parse(response.body, object_class: OpenStruct)
