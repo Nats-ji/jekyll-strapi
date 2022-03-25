@@ -32,7 +32,11 @@ module Jekyll
         Jekyll.logger.info "Jekyll Strapi:", "Fetching entries from #{uri}"
         # Get entries
         if @api_key
-          response = Net::HTTP.get_response(uri, { "Authorization" => "Bearer #{api_key}"})
+          request = Net::HTTP::Get.new(uri)
+          request["Authorization"] = "Bearer #{@api_key}"
+          response = Net::HTTP.start(uri.hostname, uri.port) {|http|
+            http.request(request)
+          }
         else
           response = Net::HTTP.get_response(uri)
         end
