@@ -70,7 +70,6 @@ module Jekyll
             document.month = dt.strftime("%m")
             document.day = dt.strftime("%d")
             document.url = @site.strapi_link_resolver(collection_name, document)
-            puts document
           end
 
 
