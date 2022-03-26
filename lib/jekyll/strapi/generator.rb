@@ -31,7 +31,7 @@ module Jekyll
 
         # Use the permalink collection setting if it is set
         if @collection.config.key? 'permalink'
-          self.data['permalink'] = @collection.config['permalink']
+          self.data['permalink'] = @document.url
         end
 
         self.data['document'] = StrapiDocumentDrop.new(@document)

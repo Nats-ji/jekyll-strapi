@@ -25,15 +25,28 @@ module Jekyll
     def strapi_link_resolver(collection = nil, document = nil)
       return "/" unless collection != nil and @config['strapi']['collections'][collection]['permalink'] != nil
 
-      url = Jekyll::URL.new(
-        :template => @config['strapi']['collections'][collection]['permalink'],
-        :placeholders => {
-          :id => document.id.to_s,
-          :uid => document.uid,
-          :slug => document.slug,
-          :type => document.type
-        }
-      )
+      if @config['strapi']['api_version'] == "v4"
+        url = Jekyll::URL.new(
+          :template => @config['strapi']['collections'][collection]['permalink'],
+          :placeholders => {
+            :id => document.id.to_s,
+            :uid => document.attributes.uid,
+            :slug => document.attributes.slug,
+            :type => document.type
+          }
+        )
+
+      else
+        url = Jekyll::URL.new(
+          :template => @config['strapi']['collections'][collection]['permalink'],
+          :placeholders => {
+            :id => document.id.to_s,
+            :uid => document.uid,
+            :slug => document.slug,
+            :type => document.type
+          }
+        )
+      end
 
       url.to_s
     end

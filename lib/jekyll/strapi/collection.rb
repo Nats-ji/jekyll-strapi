@@ -19,7 +19,11 @@ module Jekyll
       end
 
       def path
-        "/#{@config['type'] || @collection_name}?_limit=10000"
+        if @config['api_version'] == "v4"
+          "/api/#{@config['type'] || @collection_name}"
+        else
+          "/#{@config['type'] || @collection_name}"
+        end
       end
 
       def each
