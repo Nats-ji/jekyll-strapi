@@ -30,7 +30,9 @@ strapi:
         articles:
             # Collection name (optional)
             type: article
-            # Permalink used to generate the output files (eg. /articles/:id). Placeholders: (:id, :slug, :uid, :type)
+            # Date for the placeholder (default: publishedAt)
+            date: updatedAt
+            # Permalink used to generate the output files (eg. /articles/:id). Placeholders: (:id, :slug, :uid, :type, :y, :m, :d)
             permalink: /articles/:id/
             # Optional custom query eg. ?_limit=10000&author.id=1 (optional)
             query: ?_limit=10000&author.id=1

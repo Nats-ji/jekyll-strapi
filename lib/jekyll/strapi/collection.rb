@@ -1,6 +1,7 @@
 require "net/http"
 require "ostruct"
 require "json"
+require "date"
 
 module Jekyll
   module Strapi
@@ -24,6 +25,10 @@ module Jekyll
         else
           "/#{@config['type'] || @collection_name}"
         end
+      end
+
+      def collection_date
+        @config["date"] || "publishedAt"
       end
 
       def each
@@ -57,18 +62,28 @@ module Jekyll
         case @config["api_version"]
         when "v4"
           result.data.each do |document|
+            dt = DateTime.parse(document.attributes[collection_date])
             document.type = collection_name
             document.collection = collection_name
             document.id ||= document._id
+            document.year = dt.strftime("%Y")
+            document.month = dt.strftime("%m")
+            document.day = dt.strftime("%d")
             document.url = @site.strapi_link_resolver(collection_name, document)
+            puts document
           end
+
 
           result.data.each {|x| yield(x)}
         else
           result.each do |document|
+            dt = DateTime.parse(document[collection_date])
             document.type = collection_name
             document.collection = collection_name
             document.id ||= document._id
+            document.year = dt.strftime("%Y")
+            document.month = dt.strftime("%m")
+            document.day = dt.strftime("%d")
             document.url = @site.strapi_link_resolver(collection_name, document)
           end
 

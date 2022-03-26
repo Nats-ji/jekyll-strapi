@@ -32,7 +32,10 @@ module Jekyll
             :id => document.id.to_s,
             :uid => document.attributes.uid,
             :slug => document.attributes.slug,
-            :type => document.type
+            :type => document.type,
+            :y => document.year,
+            :m => document.month,
+            :d => document.day
           }
         )
 
@@ -43,7 +46,10 @@ module Jekyll
             :id => document.id.to_s,
             :uid => document.uid,
             :slug => document.slug,
-            :type => document.type
+            :type => document.type,
+            :y => document.year,
+            :m => document.month,
+            :d => document.day
           }
         )
       end
