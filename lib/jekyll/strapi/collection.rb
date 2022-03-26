@@ -13,6 +13,7 @@ module Jekyll
         @collection_name = collection_name
         @config = config
         @api_key = ENV["STRAPI_API_KEY"]
+        @result_cache = Hash.new
       end
 
       def generate?
@@ -34,28 +35,36 @@ module Jekyll
       def each
         # Initialize the HTTP query
         uri = URI("#{@site.endpoint}#{path}")
-        if @config['query']
+        if @config['query'] 
           uri += @config['query']
-          p uri
         end
-        Jekyll.logger.info "Jekyll Strapi:", "Fetching entries from #{uri}"
-        # Get entries
-        if @api_key
-          request = Net::HTTP::Get.new(uri)
-          request["Authorization"] = "Bearer #{@api_key}"
-          response = Net::HTTP.start(uri.hostname, uri.port) {|http|
-            http.request(request)
-          }
+        # Check if cached the result
+        if @result_cache.key?(uri)
+          Jekyll.logger.info "Jekyll Strapi:", "Already cached for #{uri}. Fetching entries from cache."
+          result = @result_cache[uri]
+
         else
-          response = Net::HTTP.get_response(uri)
-        end
-        # Check response code
-        if response.code == "200"
-          result = JSON.parse(response.body, object_class: OpenStruct)
-        elsif response.code == "401"
-          raise "The Strapi server sent a error with the following status: #{response.code}. Please make sure you authorized the API access in the Users & Permissions section of the Strapi admin panel."
-        else
-          raise "The Strapi server sent a error with the following status: #{response.code}. Please make sure it is correctly running."
+
+          Jekyll.logger.info "Jekyll Strapi:", "Fetching entries from #{uri}"
+          # Get entries
+          if @api_key
+            request = Net::HTTP::Get.new(uri)
+            request["Authorization"] = "Bearer #{@api_key}"
+            response = Net::HTTP.start(uri.hostname, uri.port) {|http|
+              http.request(request)
+            }
+          else
+            response = Net::HTTP.get_response(uri)
+          end
+          # Check response code
+          if response.code == "200"
+            result = JSON.parse(response.body, object_class: OpenStruct)
+            @result_cache[uri] = result
+          elsif response.code == "401"
+            raise "The Strapi server sent a error with the following status: #{response.code}. Please make sure you authorized the API access in the Users & Permissions section of the Strapi admin panel."
+          else
+            raise "The Strapi server sent a error with the following status: #{response.code}. Please make sure it is correctly running."
+          end
         end
 
         # Add necessary properties

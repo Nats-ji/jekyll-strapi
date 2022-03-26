@@ -1,5 +1,7 @@
 # jekyll-strapi
 
+forked from [strapi/jekyll-strapi](https://github.com/strapi/jekyll-strapi)
+
 ## Install
 
 Add the "jekyll-strapi" gem to your Gemfile:
@@ -15,7 +17,14 @@ plugins:
     - jekyll-strapi
 ```
 
+run
+```sh
+bundle update
+```
+
 ## Configuration
+
+Add to `_config.yml`:
 
 ```yaml
 strapi:
@@ -44,7 +53,7 @@ strapi:
 
 ## Authorization
 
-Set the api key in the `STRAPI_API_KEY` environment variable.
+Set your strapi api key with the `STRAPI_API_KEY` environment variable.
 
 ```sh
 export STRAPI_API_KEY="your api key"
@@ -86,4 +95,32 @@ v4 api has changed:
     </div>
 </article>
 {% endfor %}
+```
+
+To render single post page:
+
+```html
+<article>
+  <header>
+    <h1>{{ page.document.title | escape }}</h1>
+  </header>
+  <span>{{ page.document.createdAt | date_to_string }}</span>
+  <div>
+    {{ page.document.content | markdownify }}
+  </div>
+</article>
+```
+
+v4:
+
+```html
+<article>
+  <header>
+    <h1>{{ page.document.attributes.title | escape }}</h1>
+  </header>
+  <span>{{ page.document.attributes.createdAt | date_to_string }}</span>
+  <div>
+    {{ page.document.attributes.content | markdownify }}
+  </div>
+</article>
 ```
